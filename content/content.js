@@ -10,6 +10,7 @@
     extension_enabled: 'data-unhook-enabled',
     hide_home_feed: 'data-hide-home-feed',
     redirect_to_subscriptions: 'data-redirect-to-subscriptions',
+    redirect_to_playlist: 'data-redirect-to-playlist',
     hide_sidebar: 'data-hide-sidebar',
     hide_recommended: 'data-hide-recommended',
     hide_live_chat: 'data-hide-live-chat',
@@ -45,6 +46,8 @@
     extension_enabled: true,
     hide_home_feed: true,
     redirect_to_subscriptions: false,
+    redirect_to_playlist: false,
+    custom_playlist_url: 'https://www.youtube.com/feed/playlists',
     hide_sidebar: true,
     hide_recommended: true,
     hide_live_chat: true,
@@ -140,12 +143,19 @@
     const path = window.location.pathname;
     const search = window.location.search;
 
-    // 1. Home feed redirect to subscriptions
-    if (currentSettings.redirect_to_subscriptions && (path === '/' || path === '/index')) {
-      // If we are on home without search queries like watch or channel
+    // 1. Home feed redirect to subscriptions or playlist
+    if (path === '/' || path === '/index') {
       if (!search || search === '?' || search.startsWith('?pbjreload') || search.startsWith('?app=desktop')) {
-        window.location.replace('/feed/subscriptions');
-        return;
+        if (currentSettings.redirect_to_subscriptions) {
+          window.location.replace('/feed/subscriptions');
+          return;
+        } else if (currentSettings.redirect_to_playlist) {
+          const target = (currentSettings.custom_playlist_url && currentSettings.custom_playlist_url.trim())
+            ? currentSettings.custom_playlist_url.trim()
+            : '/feed/playlists';
+          window.location.replace(target);
+          return;
+        }
       }
     }
 

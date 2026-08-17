@@ -7,6 +7,8 @@ const DEFAULT_SETTINGS = {
   theme: 'dark',
   hide_home_feed: true,
   redirect_to_subscriptions: false,
+  redirect_to_playlist: false,
+  custom_playlist_url: 'https://www.youtube.com/feed/playlists',
   hide_sidebar: true,
   hide_recommended: true,
   hide_live_chat: true,

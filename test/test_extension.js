@@ -67,6 +67,7 @@ const contentCssContent = fs.readFileSync(path.join(rootDir, 'content', 'content
 const keysToVerify = [
   'hide_home_feed',
   'redirect_to_subscriptions',
+  'redirect_to_playlist',
   'hide_sidebar',
   'hide_recommended',
   'hide_live_chat',

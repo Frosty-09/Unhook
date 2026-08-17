@@ -9,6 +9,8 @@ const DEFAULT_SETTINGS = {
   // 1. Home Feed
   hide_home_feed: true,
   redirect_to_subscriptions: false,
+  redirect_to_playlist: false,
+  custom_playlist_url: 'https://www.youtube.com/feed/playlists',
 
   // 2. Video Sidebar
   hide_sidebar: true,
@@ -160,6 +162,22 @@ document.addEventListener('DOMContentLoaded', () => {
       if (key) {
         const update = {};
         update[key] = cb.checked;
+
+        // Mutual exclusivity for redirect options
+        if (key === 'redirect_to_subscriptions' && cb.checked) {
+          const playlistCb = document.getElementById('redirect_to_playlist');
+          if (playlistCb && playlistCb.checked) {
+            playlistCb.checked = false;
+            update['redirect_to_playlist'] = false;
+          }
+        } else if (key === 'redirect_to_playlist' && cb.checked) {
+          const subCb = document.getElementById('redirect_to_subscriptions');
+          if (subCb && subCb.checked) {
+            subCb.checked = false;
+            update['redirect_to_subscriptions'] = false;
+          }
+        }
+
         storage.set(update);
       }
     });

@@ -5,8 +5,11 @@
 const DEFAULT_SETTINGS = {
   extension_enabled: true,
   theme: 'dark',
+  // 1. Home Feed
   hide_home_feed: true,
   redirect_to_subscriptions: false,
+  redirect_to_playlist: false,
+  custom_playlist_url: 'https://www.youtube.com/feed/playlists',
   hide_sidebar: true,
   hide_recommended: true,
   hide_live_chat: true,
@@ -94,6 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const themeLabel = document.getElementById('themeLabel');
   const checkboxes = document.querySelectorAll('input[type="checkbox"]');
   const customCssInput = document.getElementById('customCssInput');
+  const customPlaylistUrlInput = document.getElementById('custom_playlist_url');
   const saveCssBtn = document.getElementById('saveCssBtn');
   const cssSaveStatus = document.getElementById('cssSaveStatus');
   const exportSettingsBtn = document.getElementById('exportSettingsBtn');
@@ -117,6 +121,11 @@ document.addEventListener('DOMContentLoaded', () => {
           cb.checked = Boolean(current[key]);
         }
       });
+
+      // Custom Playlist URL
+      if (customPlaylistUrlInput) {
+        customPlaylistUrlInput.value = current.custom_playlist_url || '';
+      }
 
       // Custom CSS
       if (customCssInput) {
@@ -148,10 +157,33 @@ document.addEventListener('DOMContentLoaded', () => {
       if (key) {
         const update = {};
         update[key] = cb.checked;
+
+        // Mutual exclusivity for redirect options
+        if (key === 'redirect_to_subscriptions' && cb.checked) {
+          const playlistCb = document.getElementById('redirect_to_playlist');
+          if (playlistCb && playlistCb.checked) {
+            playlistCb.checked = false;
+            update['redirect_to_playlist'] = false;
+          }
+        } else if (key === 'redirect_to_playlist' && cb.checked) {
+          const subCb = document.getElementById('redirect_to_subscriptions');
+          if (subCb && subCb.checked) {
+            subCb.checked = false;
+            update['redirect_to_subscriptions'] = false;
+          }
+        }
+
         storage.set(update);
       }
     });
   });
+
+  // Custom Playlist URL input changes
+  if (customPlaylistUrlInput) {
+    customPlaylistUrlInput.addEventListener('change', () => {
+      storage.set({ custom_playlist_url: customPlaylistUrlInput.value.trim() });
+    });
+  }
 
   // Theme Switcher
   function applyTheme(theme) {

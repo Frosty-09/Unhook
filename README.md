@@ -12,6 +12,7 @@ A lightweight, distraction-free Chrome extension (Manifest V3) that gives you co
 
 - **Hide Home Feed**: Cleans the YouTube homepage completely, removing algorithmic recommendations.
 - **Redirect to Subscriptions**: Automatically routes you straight to `youtube.com/feed/subscriptions` when opening YouTube.
+- **Redirect to Playlist**: Automatically routes you straight to your YouTube Playlists (`youtube.com/feed/playlists`) or a custom playlist URL when opening YouTube.
 
 ### 🎬 2. Video Sidebar
 
