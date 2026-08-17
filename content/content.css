@@ -148,31 +148,12 @@ html[data-unhook-enabled="true"][data-hide-playlist="true"]
 
 /* --------------------------------------------------------------------------
    FULL WIDTH PLAYLIST & VIEW STYLES
+   Layout Hierarchy:
+   1. Video Player (top, order: 1)
+   2. Full Width Playlist (middle, directly under player, order: 2)
+   3. Video Info & Description (under playlist, order: 3, controlled by settings)
+   4. Comments Section (under video info, order: 4, controlled by settings)
    -------------------------------------------------------------------------- */
-/* Hide comments, metadata, and below-the-fold content when Full Width Playlist is active */
-html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(
-    ytd-playlist-panel-renderer
-  )
-  #below,
-html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(
-    ytd-playlist-panel-renderer
-  )
-  #comments,
-html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(
-    ytd-playlist-panel-renderer
-  )
-  ytd-comments,
-html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(
-    ytd-playlist-panel-renderer
-  )
-  ytd-watch-metadata,
-html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(
-    ytd-playlist-panel-renderer
-  )
-  #above-the-fold {
-  display: none !important;
-}
-
 html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(
     ytd-playlist-panel-renderer
   )
@@ -183,7 +164,7 @@ html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(
   #columns.ytd-watch-grid {
   display: flex !important;
   flex-direction: column !important;
-  align-items: center !important;
+  align-items: stretch !important;
   width: 100% !important;
   max-width: 100% !important;
 }
@@ -195,14 +176,37 @@ html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(
 html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(
     ytd-playlist-panel-renderer
   )
-  #primary.ytd-watch-grid {
-  max-width: 100% !important;
-  width: 100% !important;
-  min-width: 0 !important;
-  margin: 0 auto !important;
-  padding-right: 0 !important;
+  #primary.ytd-watch-grid,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(
+    ytd-playlist-panel-renderer
+  )
+  #primary-inner {
+  display: contents !important;
 }
 
+/* 1. Video Player on Top */
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(
+    ytd-playlist-panel-renderer
+  )
+  #player-container,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(
+    ytd-playlist-panel-renderer
+  )
+  #player,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(
+    ytd-playlist-panel-renderer
+  )
+  #full-bleed-container,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(
+    ytd-playlist-panel-renderer
+  )
+  ytd-player {
+  order: 1 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* 2. Full Width Playlist in the Middle (directly under player) */
 html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(
     ytd-playlist-panel-renderer
   )
@@ -211,11 +215,12 @@ html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(
     ytd-playlist-panel-renderer
   )
   #secondary.ytd-watch-grid {
+  order: 2 !important;
   width: 100% !important;
   min-width: 100% !important;
   max-width: 100% !important;
-  margin: 16px auto 0 auto !important;
-  padding: 0 16px !important;
+  margin: 16px 0 0 0 !important;
+  padding: 0 !important;
   box-sizing: border-box !important;
 }
 
@@ -229,6 +234,40 @@ html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(
   #secondary-inner.ytd-watch-grid {
   width: 100% !important;
   max-width: 100% !important;
+}
+
+/* 3. Video Info & Description Pushed Downward Below Playlist */
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(
+    ytd-playlist-panel-renderer
+  )
+  #above-the-fold,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(
+    ytd-playlist-panel-renderer
+  )
+  ytd-watch-metadata {
+  order: 3 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 16px 0 0 0 !important;
+}
+
+/* 4. Comments Section Pushed Downward Below Description */
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(
+    ytd-playlist-panel-renderer
+  )
+  #below,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(
+    ytd-playlist-panel-renderer
+  )
+  #comments,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(
+    ytd-playlist-panel-renderer
+  )
+  ytd-comments {
+  order: 4 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 16px 0 0 0 !important;
 }
 
 html[data-unhook-enabled="true"][data-full-width-playlist="true"]
