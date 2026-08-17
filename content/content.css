@@ -80,6 +80,65 @@ html[data-unhook-enabled="true"][data-hide-playlist="true"] ytd-watch-grid #play
   display: none !important;
 }
 
+/* Full Width Playlist (Expands playlist to full width below player and hides comments + video info) */
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(ytd-playlist-panel-renderer) #below,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(ytd-playlist-panel-renderer) #comments,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(ytd-playlist-panel-renderer) ytd-comments,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(ytd-playlist-panel-renderer) ytd-watch-metadata,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(ytd-playlist-panel-renderer) #above-the-fold {
+  display: none !important;
+}
+
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(ytd-playlist-panel-renderer) #columns.ytd-watch-flexy,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(ytd-playlist-panel-renderer) #columns.ytd-watch-grid {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(ytd-playlist-panel-renderer) #primary.ytd-watch-flexy,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(ytd-playlist-panel-renderer) #primary.ytd-watch-grid {
+  max-width: 100% !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 auto !important;
+  padding-right: 0 !important;
+}
+
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(ytd-playlist-panel-renderer) #secondary.ytd-watch-flexy,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(ytd-playlist-panel-renderer) #secondary.ytd-watch-grid {
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+  margin: 16px auto 0 auto !important;
+  padding: 0 16px !important;
+  box-sizing: border-box !important;
+}
+
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(ytd-playlist-panel-renderer) #secondary-inner.ytd-watch-flexy,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(ytd-playlist-panel-renderer) #secondary-inner.ytd-watch-grid {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+html[data-unhook-enabled="true"][data-full-width-playlist="true"] ytd-playlist-panel-renderer {
+  width: 100% !important;
+  max-width: 100% !important;
+  max-height: 600px !important;
+  border-radius: 12px !important;
+}
+
+html[data-unhook-enabled="true"][data-full-width-playlist="true"] ytd-playlist-panel-renderer #items.ytd-playlist-panel-renderer {
+  max-height: 520px !important;
+}
+
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(ytd-playlist-panel-renderer) #secondary #related,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(ytd-playlist-panel-renderer) #secondary ytd-watch-next-secondary-results-renderer #items ytd-compact-video-renderer {
+  display: none !important;
+}
+
 /* Hide Fundraiser / Donation Shelf */
 html[data-unhook-enabled="true"][data-hide-fundraiser="true"] ytd-donation-shelf-renderer,
 html[data-unhook-enabled="true"][data-hide-fundraiser="true"] #donation-shelf,

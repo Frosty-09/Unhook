@@ -72,6 +72,7 @@ const keysToVerify = [
   'hide_recommended',
   'hide_live_chat',
   'hide_playlist',
+  'full_width_playlist',
   'hide_fundraiser',
   'hide_transcript_chapters',
   'hide_endscreen_feed',

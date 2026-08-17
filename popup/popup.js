@@ -17,6 +17,7 @@ const DEFAULT_SETTINGS = {
   hide_recommended: true,
   hide_live_chat: true,
   hide_playlist: true,
+  full_width_playlist: false,
   hide_fundraiser: true,
   hide_transcript_chapters: true,
   group_sidebar_collapsed: false,
@@ -175,6 +176,21 @@ document.addEventListener('DOMContentLoaded', () => {
           if (subCb && subCb.checked) {
             subCb.checked = false;
             update['redirect_to_subscriptions'] = false;
+          }
+        }
+
+        // Mutual exclusivity for playlist options
+        if (key === 'full_width_playlist' && cb.checked) {
+          const hidePlaylistCb = document.getElementById('hide_playlist');
+          if (hidePlaylistCb && hidePlaylistCb.checked) {
+            hidePlaylistCb.checked = false;
+            update['hide_playlist'] = false;
+          }
+        } else if (key === 'hide_playlist' && cb.checked) {
+          const fullWidthCb = document.getElementById('full_width_playlist');
+          if (fullWidthCb && fullWidthCb.checked) {
+            fullWidthCb.checked = false;
+            update['full_width_playlist'] = false;
           }
         }
 

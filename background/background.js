@@ -13,6 +13,7 @@ const DEFAULT_SETTINGS = {
   hide_recommended: true,
   hide_live_chat: true,
   hide_playlist: true,
+  full_width_playlist: false,
   hide_fundraiser: true,
   hide_transcript_chapters: true,
   group_sidebar_collapsed: false,

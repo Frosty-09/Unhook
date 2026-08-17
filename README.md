@@ -20,6 +20,7 @@ A lightweight, distraction-free Chrome extension (Manifest V3) that gives you co
 - **Hide Recommended**: Selectively hides related/recommended video suggestions.
 - **Hide Live Chat**: Hides live chat streams and replay boxes.
 - **Hide Playlist**: Hides playlist drawer and next video queues.
+- **Full Width Playlist**: Expands the playlist to take the full width of the window below the video player while automatically hiding comments and video info.
 - **Hide Fundraiser**: Removes donation and fundraiser shelves.
 - **Hide Transcript & Chapters**: Hides video transcripts and timestamp markers.
 
