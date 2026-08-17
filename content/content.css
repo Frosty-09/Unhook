@@ -259,7 +259,8 @@ html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(
 
 /* ==========================================================================
    VIEW MODE 1: CARD GRID VIEW (Default / 'grid')
-   Matches the aesthetic of the standard YouTube feed, sized dynamically for 5 columns
+   Exact YouTube Home Feed aesthetic: 16:9 thumbnails on top, titles & channels below,
+   clean transparent cards with zero hover motion / animations.
    ========================================================================== */
 html[data-unhook-enabled="true"][data-full-width-playlist="true"][data-playlist-view="grid"]
   ytd-playlist-panel-renderer
@@ -270,22 +271,22 @@ html[data-unhook-enabled="true"][data-full-width-playlist="true"]:not(
   ytd-playlist-panel-renderer
   #items.ytd-playlist-panel-renderer {
   display: grid !important;
-  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)) !important;
-  gap: 20px 14px !important;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)) !important;
+  gap: 24px 16px !important;
   padding: 16px !important;
   max-height: 720px !important;
   overflow-y: auto !important;
   box-sizing: border-box !important;
 }
 
+/* Video Card Item */
 html[data-unhook-enabled="true"][data-full-width-playlist="true"][data-playlist-view="grid"]
   ytd-playlist-panel-video-renderer,
 html[data-unhook-enabled="true"][data-full-width-playlist="true"]:not(
     [data-playlist-view]
   )
   ytd-playlist-panel-video-renderer {
-  display: flex !important;
-  flex-direction: column !important;
+  display: block !important;
   width: 100% !important;
   height: auto !important;
   min-height: unset !important;
@@ -294,29 +295,60 @@ html[data-unhook-enabled="true"][data-full-width-playlist="true"]:not(
   margin: 0 !important;
   background: transparent !important;
   border: none !important;
-  border-radius: 0 !important;
   box-shadow: none !important;
   box-sizing: border-box !important;
   overflow: visible !important;
   position: relative !important;
   cursor: pointer !important;
   contain: none !important;
+  transform: none !important;
+  transition: none !important;
 }
 
 html[data-unhook-enabled="true"][data-full-width-playlist="true"][data-playlist-view="grid"]
+  ytd-playlist-panel-video-renderer:hover,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:not(
+    [data-playlist-view]
+  )
+  ytd-playlist-panel-video-renderer:hover {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* The <a> Endpoint Anchor */
+html[data-unhook-enabled="true"][data-full-width-playlist="true"][data-playlist-view="grid"]
   ytd-playlist-panel-video-renderer
   a#wc-endpoint,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:not(
+    [data-playlist-view]
+  )
+  ytd-playlist-panel-video-renderer
+  a#wc-endpoint {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: unset !important;
+  max-height: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  text-decoration: none !important;
+  color: inherit !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+  position: relative !important;
+}
+
+/* The #container Wrapper */
 html[data-unhook-enabled="true"][data-full-width-playlist="true"][data-playlist-view="grid"]
   ytd-playlist-panel-video-renderer
   #container,
 html[data-unhook-enabled="true"][data-full-width-playlist="true"][data-playlist-view="grid"]
   ytd-playlist-panel-video-renderer
   #container.ytd-playlist-panel-video-renderer,
-html[data-unhook-enabled="true"][data-full-width-playlist="true"]:not(
-    [data-playlist-view]
-  )
-  ytd-playlist-panel-video-renderer
-  a#wc-endpoint,
 html[data-unhook-enabled="true"][data-full-width-playlist="true"]:not(
     [data-playlist-view]
   )
@@ -341,12 +373,56 @@ html[data-unhook-enabled="true"][data-full-width-playlist="true"]:not(
   border: none !important;
   box-sizing: border-box !important;
   overflow: visible !important;
-  position: static !important;
+  position: relative !important;
 }
 
+/* Index Badge (Floating on Thumbnail Top-Left) */
+html[data-unhook-enabled="true"][data-full-width-playlist="true"][data-playlist-view="grid"]
+  ytd-playlist-panel-video-renderer
+  #index-container,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"][data-playlist-view="grid"]
+  ytd-playlist-panel-video-renderer
+  #index,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:not(
+    [data-playlist-view]
+  )
+  ytd-playlist-panel-video-renderer
+  #index-container,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:not(
+    [data-playlist-view]
+  )
+  ytd-playlist-panel-video-renderer
+  #index {
+  position: absolute !important;
+  top: 8px !important;
+  left: 8px !important;
+  z-index: 10 !important;
+  background: rgba(0, 0, 0, 0.8) !important;
+  color: #ffffff !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  line-height: 1.2 !important;
+  width: auto !important;
+  height: auto !important;
+  min-width: unset !important;
+  min-height: unset !important;
+  max-width: unset !important;
+  max-height: unset !important;
+  margin: 0 !important;
+  display: block !important;
+  flex: none !important;
+}
+
+/* Thumbnail Container (16:9 Aspect Ratio Frame) */
 html[data-unhook-enabled="true"][data-full-width-playlist="true"][data-playlist-view="grid"]
   ytd-playlist-panel-video-renderer
   #thumbnail-container,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"][data-playlist-view="grid"]
+  ytd-playlist-panel-video-renderer
+  #thumbnail-container.ytd-playlist-panel-video-renderer,
 html[data-unhook-enabled="true"][data-full-width-playlist="true"][data-playlist-view="grid"]
   ytd-playlist-panel-video-renderer
   ytd-thumbnail,
@@ -355,6 +431,11 @@ html[data-unhook-enabled="true"][data-full-width-playlist="true"]:not(
   )
   ytd-playlist-panel-video-renderer
   #thumbnail-container,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:not(
+    [data-playlist-view]
+  )
+  ytd-playlist-panel-video-renderer
+  #thumbnail-container.ytd-playlist-panel-video-renderer,
 html[data-unhook-enabled="true"][data-full-width-playlist="true"]:not(
     [data-playlist-view]
   )
@@ -368,18 +449,34 @@ html[data-unhook-enabled="true"][data-full-width-playlist="true"]:not(
   min-height: unset !important;
   max-height: none !important;
   aspect-ratio: 16 / 9 !important;
-  margin: 0 0 8px 0 !important;
+  margin: 0 0 10px 0 !important;
   padding: 0 !important;
   border-radius: 12px !important;
   overflow: hidden !important;
   position: relative !important;
-  background-color: #1a1a1a !important;
-  flex-shrink: 0 !important;
-  transition:
-    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 0.2s ease !important;
+  background-color: #181818 !important;
+  flex: none !important;
+  transform: none !important;
+  -webkit-transform: none !important;
 }
 
+/* Thumbnail and Image Elements (Full 16:9 Coverage, Zero Transform Upward Shift) */
+html[data-unhook-enabled="true"][data-full-width-playlist="true"][data-playlist-view="grid"]
+  ytd-playlist-panel-video-renderer
+  #thumbnail-container
+  ytd-thumbnail,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"][data-playlist-view="grid"]
+  ytd-playlist-panel-video-renderer
+  #thumbnail-container
+  a#thumbnail,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"][data-playlist-view="grid"]
+  ytd-playlist-panel-video-renderer
+  #thumbnail-container
+  yt-image,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"][data-playlist-view="grid"]
+  ytd-playlist-panel-video-renderer
+  #thumbnail-container
+  yt-img-shadow,
 html[data-unhook-enabled="true"][data-full-width-playlist="true"][data-playlist-view="grid"]
   ytd-playlist-panel-video-renderer
   #thumbnail-container
@@ -387,8 +484,22 @@ html[data-unhook-enabled="true"][data-full-width-playlist="true"][data-playlist-
 html[data-unhook-enabled="true"][data-full-width-playlist="true"][data-playlist-view="grid"]
   ytd-playlist-panel-video-renderer
   #thumbnail-container
-  yt-img-shadow,
-html[data-unhook-enabled="true"][data-full-width-playlist="true"][data-playlist-view="grid"]
+  .yt-core-image,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:not(
+    [data-playlist-view]
+  )
+  ytd-playlist-panel-video-renderer
+  #thumbnail-container
+  ytd-thumbnail,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:not(
+    [data-playlist-view]
+  )
+  ytd-playlist-panel-video-renderer
+  #thumbnail-container
+  a#thumbnail,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:not(
+    [data-playlist-view]
+  )
   ytd-playlist-panel-video-renderer
   #thumbnail-container
   yt-image,
@@ -397,43 +508,40 @@ html[data-unhook-enabled="true"][data-full-width-playlist="true"]:not(
   )
   ytd-playlist-panel-video-renderer
   #thumbnail-container
-  img,
-html[data-unhook-enabled="true"][data-full-width-playlist="true"]:not(
-    [data-playlist-view]
-  )
-  ytd-playlist-panel-video-renderer
-  #thumbnail-container
   yt-img-shadow,
 html[data-unhook-enabled="true"][data-full-width-playlist="true"]:not(
     [data-playlist-view]
   )
   ytd-playlist-panel-video-renderer
   #thumbnail-container
-  yt-image {
+  img,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]:not(
+    [data-playlist-view]
+  )
+  ytd-playlist-panel-video-renderer
+  #thumbnail-container
+  .yt-core-image {
   display: block !important;
   width: 100% !important;
   height: 100% !important;
   min-width: 100% !important;
   min-height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
   object-fit: cover !important;
   border-radius: 12px !important;
-  position: static !important;
   margin: 0 !important;
   padding: 0 !important;
+  transform: none !important;
+  -webkit-transform: none !important;
 }
 
-html[data-unhook-enabled="true"][data-full-width-playlist="true"][data-playlist-view="grid"]
-  ytd-playlist-panel-video-renderer:hover
-  #thumbnail-container,
-html[data-unhook-enabled="true"][data-full-width-playlist="true"]:not(
-    [data-playlist-view]
-  )
-  ytd-playlist-panel-video-renderer:hover
-  #thumbnail-container {
-  transform: scale(1.025) !important;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6) !important;
-}
-
+/* Selected Video Thumbnail Glow */
 html[data-unhook-enabled="true"][data-full-width-playlist="true"][data-playlist-view="grid"]
   ytd-playlist-panel-video-renderer[selected]
   #thumbnail-container,
@@ -444,35 +552,9 @@ html[data-unhook-enabled="true"][data-full-width-playlist="true"]:not(
   #thumbnail-container {
   outline: 2.5px solid #3ea6ff !important;
   outline-offset: 2px !important;
-  box-shadow: 0 0 16px rgba(62, 166, 255, 0.45) !important;
 }
 
-html[data-unhook-enabled="true"][data-full-width-playlist="true"][data-playlist-view="grid"]
-  ytd-playlist-panel-video-renderer
-  #index,
-html[data-unhook-enabled="true"][data-full-width-playlist="true"]:not(
-    [data-playlist-view]
-  )
-  ytd-playlist-panel-video-renderer
-  #index {
-  position: absolute !important;
-  top: 6px !important;
-  left: 6px !important;
-  background: rgba(0, 0, 0, 0.75) !important;
-  backdrop-filter: blur(4px) !important;
-  color: #ffffff !important;
-  font-size: 11px !important;
-  font-weight: 600 !important;
-  padding: 2px 6px !important;
-  border-radius: 4px !important;
-  z-index: 5 !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
-  line-height: 1.2 !important;
-  width: auto !important;
-  height: auto !important;
-  margin: 0 !important;
-}
-
+/* Metadata Block Below Thumbnail */
 html[data-unhook-enabled="true"][data-full-width-playlist="true"][data-playlist-view="grid"]
   ytd-playlist-panel-video-renderer
   #meta,
@@ -496,12 +578,14 @@ html[data-unhook-enabled="true"][data-full-width-playlist="true"]:not(
   height: auto !important;
   min-height: unset !important;
   max-height: none !important;
-  padding: 0 !important;
   margin: 0 !important;
+  padding: 0 2px !important;
   box-sizing: border-box !important;
   overflow: visible !important;
+  flex: 1 1 auto !important;
 }
 
+/* Video Title (Standard Home Feed Typography: 14px, Bold, 2-line max) */
 html[data-unhook-enabled="true"][data-full-width-playlist="true"][data-playlist-view="grid"]
   ytd-playlist-panel-video-renderer
   #video-title,
@@ -523,18 +607,20 @@ html[data-unhook-enabled="true"][data-full-width-playlist="true"]:not(
   -webkit-box-orient: vertical !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
-  font-size: 13.5px !important;
+  font-size: 14px !important;
   font-weight: 500 !important;
-  line-height: 1.35 !important;
-  max-height: 2.7em !important;
-  color: #f1f1f1 !important;
-  margin: 0 0 3px 0 !important;
+  line-height: 1.4 !important;
+  max-height: 2.8em !important;
+  color: var(--yt-spec-text-primary, #ffffff) !important;
+  margin: 0 0 4px 0 !important;
+  padding: 0 !important;
   white-space: normal !important;
   word-break: break-word !important;
   visibility: visible !important;
   opacity: 1 !important;
 }
 
+/* Channel Name */
 html[data-unhook-enabled="true"][data-full-width-playlist="true"][data-playlist-view="grid"]
   ytd-playlist-panel-video-renderer
   #byline-container,
@@ -560,13 +646,14 @@ html[data-unhook-enabled="true"][data-full-width-playlist="true"]:not(
   ytd-playlist-panel-video-renderer
   ytd-channel-name {
   display: block !important;
-  font-size: 11.5px !important;
-  color: #aaaaaa !important;
+  font-size: 12px !important;
+  color: var(--yt-spec-text-secondary, #aaaaaa) !important;
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   margin: 0 !important;
-  line-height: 1.2 !important;
+  padding: 0 !important;
+  line-height: 1.3 !important;
   visibility: visible !important;
   opacity: 1 !important;
 }
