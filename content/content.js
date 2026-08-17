@@ -117,10 +117,11 @@
 
     applyCustomCss(settings.custom_css);
     updatePlaylistToolbar(settings);
+    setupPlaylistCollapseHandler();
   }
 
   /**
-   * In-Page Playlist Layout Toolbar
+   * In-Page Playlist Layout Toolbar & Collapse Handler
    */
   function updatePlaylistToolbar(settings) {
     if (!settings.extension_enabled || !settings.full_width_playlist) {
@@ -171,11 +172,73 @@
         btn.classList.remove("active");
       }
     });
+
+    setupPlaylistCollapseHandler();
   }
 
   function removePlaylistToolbar() {
     const toolbar = document.getElementById("unhook-playlist-toolbar");
     if (toolbar) toolbar.remove();
+  }
+
+  /**
+   * Header Click-to-Collapse Handler for Full Width Playlist
+   */
+  function setupPlaylistCollapseHandler() {
+    if (!currentSettings.extension_enabled || !currentSettings.full_width_playlist) return;
+
+    const playlistPanel = document.querySelector("ytd-playlist-panel-renderer");
+    if (!playlistPanel) return;
+
+    const header =
+      playlistPanel.querySelector("#header-contents") ||
+      playlistPanel.querySelector(".header") ||
+      playlistPanel.querySelector("#header-top-row");
+    if (!header || header.dataset.unhookCollapseBound === "true") return;
+
+    header.dataset.unhookCollapseBound = "true";
+
+    header.addEventListener("click", (e) => {
+      // Do not collapse if clicking on view buttons, links, or action buttons (shuffle, loop, menu)
+      if (
+        e.target.closest("#unhook-playlist-toolbar") ||
+        e.target.closest("button:not(#expand-button)") ||
+        e.target.closest("a") ||
+        e.target.closest("yt-icon-button:not(#expand-button)") ||
+        e.target.closest("ytd-menu-renderer")
+      ) {
+        return;
+      }
+
+      const isCollapsed =
+        playlistPanel.hasAttribute("collapsed") ||
+        playlistPanel.classList.contains("collapsed") ||
+        playlistPanel.getAttribute("data-collapsed") === "true";
+
+      if (isCollapsed) {
+        playlistPanel.removeAttribute("collapsed");
+        playlistPanel.classList.remove("collapsed");
+        playlistPanel.setAttribute("data-collapsed", "false");
+      } else {
+        playlistPanel.setAttribute("collapsed", "");
+        playlistPanel.classList.add("collapsed");
+        playlistPanel.setAttribute("data-collapsed", "true");
+      }
+
+      // Also trigger YouTube's native expand button if present
+      const nativeExpandBtn =
+        playlistPanel.querySelector("#expand-button") ||
+        playlistPanel.querySelector('button[aria-label="Collapse"]') ||
+        playlistPanel.querySelector('button[aria-label="Expand"]') ||
+        playlistPanel.querySelector('yt-icon-button[aria-label*="ollapse"]') ||
+        playlistPanel.querySelector('yt-icon-button[aria-label*="xpand"]');
+
+      if (nativeExpandBtn && !e.target.closest("#expand-button")) {
+        try {
+          nativeExpandBtn.click();
+        } catch (err) {}
+      }
+    });
   }
 
   /**

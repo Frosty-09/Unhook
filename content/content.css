@@ -240,6 +240,90 @@ html[data-unhook-enabled="true"][data-full-width-playlist="true"]
   background: var(--yt-spec-raised-background, #1f1f1f) !important;
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
   overflow: hidden !important;
+  transition: max-height 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Collapsed Playlist State */
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]
+  ytd-playlist-panel-renderer[collapsed],
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]
+  ytd-playlist-panel-renderer.collapsed,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]
+  ytd-playlist-panel-renderer[data-collapsed="true"] {
+  height: 56px !important;
+  max-height: 56px !important;
+  min-height: 56px !important;
+  overflow: hidden !important;
+}
+
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]
+  ytd-playlist-panel-renderer[collapsed]
+  #items,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]
+  ytd-playlist-panel-renderer[collapsed]
+  #container
+  #items,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]
+  ytd-playlist-panel-renderer.collapsed
+  #items,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]
+  ytd-playlist-panel-renderer.collapsed
+  #container
+  #items,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]
+  ytd-playlist-panel-renderer[data-collapsed="true"]
+  #items,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]
+  ytd-playlist-panel-renderer[data-collapsed="true"]
+  #container
+  #items {
+  display: none !important;
+  height: 0 !important;
+  max-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Playlist Header Clickable Area */
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]
+  ytd-playlist-panel-renderer
+  #header-contents,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]
+  ytd-playlist-panel-renderer
+  .header.ytd-playlist-panel-renderer,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]
+  ytd-playlist-panel-renderer
+  #header-top-row {
+  cursor: pointer !important;
+  user-select: none !important;
+  transition: background-color 0.15s ease !important;
+}
+
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]
+  ytd-playlist-panel-renderer
+  #header-contents:hover,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]
+  ytd-playlist-panel-renderer
+  .header.ytd-playlist-panel-renderer:hover {
+  background-color: rgba(255, 255, 255, 0.04) !important;
+}
+
+/* Chevron Rotation when Collapsed */
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]
+  ytd-playlist-panel-renderer[collapsed]
+  #expand-button
+  yt-icon,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]
+  ytd-playlist-panel-renderer.collapsed
+  #expand-button
+  yt-icon,
+html[data-unhook-enabled="true"][data-full-width-playlist="true"]
+  ytd-playlist-panel-renderer[data-collapsed="true"]
+  #expand-button
+  yt-icon {
+  transform: rotate(180deg) !important;
+  transition: transform 0.2s ease !important;
 }
 
 html[data-unhook-enabled="true"][data-full-width-playlist="true"]:has(
