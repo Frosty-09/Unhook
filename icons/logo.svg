@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <radialGradient id="unhookGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff334b" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#ff0033" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <!-- Background Glow -->
+  <circle cx="64" cy="64" r="60" fill="url(#unhookGlow)"/>
+  <!-- Main Circle Outer Ring -->
+  <circle cx="64" cy="64" r="52" fill="none" stroke="#e62117" stroke-width="9" stroke-linecap="round"/>
+  <!-- Cutout Gap at Top-Right typical of Unhook / Power motif -->
+  <!-- Triangle Play symbol in center -->
+  <polygon points="54,42 54,86 88,64" fill="#e62117"/>
+</svg>

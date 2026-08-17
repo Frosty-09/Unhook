@@ -1,0 +1,474 @@
+/* ==========================================================================
+   Unhook Extension - Options Dashboard Stylesheet
+   ========================================================================== */
+
+:root {
+  --bg-primary: #121212;
+  --bg-secondary: #1e1e1e;
+  --bg-sidebar: #181818;
+  --bg-card: #222222;
+  --bg-hover: #2c2c2c;
+  --text-primary: #ffffff;
+  --text-secondary: #dcdcdc;
+  --text-muted: #8e8e8e;
+  --border-color: #2e2e2e;
+  --accent-color: #3ea6ff;
+  --accent-hover: #65b8ff;
+  --danger-color: #e62117;
+  --switch-off-bg: #444444;
+  --switch-off-thumb: #aaaaaa;
+  --switch-on-bg: #3ea6ff;
+  --switch-on-thumb: #ffffff;
+  --shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+body.theme-light {
+  --bg-primary: #f0f2f5;
+  --bg-secondary: #ffffff;
+  --bg-sidebar: #f8f9fa;
+  --bg-card: #ffffff;
+  --bg-hover: #e9ecef;
+  --text-primary: #111111;
+  --text-secondary: #333333;
+  --text-muted: #6c757d;
+  --border-color: #dee2e6;
+  --accent-color: #065fd4;
+  --accent-hover: #0356c7;
+  --danger-color: #dc3545;
+  --switch-off-bg: #ced4da;
+  --switch-off-thumb: #6c757d;
+  --switch-on-bg: #065fd4;
+  --switch-on-thumb: #ffffff;
+  --shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+}
+
+.app-layout {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* --------------------------------------------------------------------------
+   Sidebar
+   -------------------------------------------------------------------------- */
+.sidebar {
+  width: 260px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 32px;
+  padding: 0 8px;
+}
+
+.logo-icon {
+  width: 32px;
+  height: 32px;
+}
+
+.svg-logo {
+  width: 100%;
+  height: 100%;
+}
+
+.brand-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.version-tag {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.nav-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.nav-link {
+  display: block;
+  padding: 10px 14px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.nav-link:hover {
+  background-color: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.nav-link.active {
+  background-color: var(--accent-color);
+  color: #ffffff;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
+}
+
+.theme-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.theme-toggle-btn:hover {
+  background-color: var(--bg-hover);
+}
+
+.svg-icon {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+/* --------------------------------------------------------------------------
+   Main Content
+   -------------------------------------------------------------------------- */
+.main-content {
+  flex: 1;
+  padding: 32px 40px;
+  overflow-y: auto;
+  max-width: 1080px;
+}
+
+.tab-pane {
+  display: none;
+}
+
+.tab-pane.active {
+  display: block;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.pane-header {
+  margin-bottom: 24px;
+}
+
+.pane-header h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.pane-header p {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+/* --------------------------------------------------------------------------
+   Cards & Layout
+   -------------------------------------------------------------------------- */
+.settings-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+
+.card h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+}
+
+.card p {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.master-card {
+  border-color: var(--accent-color);
+  background: linear-gradient(135deg, rgba(62, 166, 255, 0.08), transparent);
+}
+
+.card-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-setting {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 10px 0;
+}
+
+.card-setting.sub {
+  margin-left: 28px;
+  padding-left: 12px;
+  border-left: 2px solid var(--border-color);
+}
+
+.card-setting strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.card-setting p {
+  font-size: 12.5px;
+  margin-top: 2px;
+}
+
+/* Danger Card */
+.danger-card {
+  border-color: var(--danger-color);
+}
+
+/* --------------------------------------------------------------------------
+   Toggle Switches
+   -------------------------------------------------------------------------- */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 38px;
+  height: 20px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.slider {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: var(--switch-off-bg);
+  border-radius: 20px;
+  transition: background-color 0.2s ease;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background-color: var(--switch-off-thumb);
+  border-radius: 50%;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+input:checked + .slider {
+  background-color: var(--switch-on-bg);
+}
+
+input:checked + .slider:before {
+  transform: translateX(18px);
+  background-color: var(--switch-on-thumb);
+}
+
+.toggle-switch.large {
+  width: 48px;
+  height: 26px;
+}
+
+.toggle-switch.large .slider:before {
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+}
+
+.toggle-switch.large input:checked + .slider:before {
+  transform: translateX(22px);
+}
+
+.toggle-switch.small {
+  width: 32px;
+  height: 16px;
+}
+
+.toggle-switch.small .slider:before {
+  height: 12px;
+  width: 12px;
+}
+
+.toggle-switch.small input:checked + .slider:before {
+  transform: translateX(16px);
+}
+
+/* --------------------------------------------------------------------------
+   Buttons & Inputs
+   -------------------------------------------------------------------------- */
+.btn-primary {
+  background-color: var(--accent-color);
+  color: #ffffff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--accent-hover);
+}
+
+.btn-secondary {
+  background-color: var(--bg-hover);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.btn-secondary:hover {
+  background-color: var(--border-color);
+}
+
+.btn-danger {
+  background-color: var(--danger-color);
+  color: #ffffff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.btn-danger:hover {
+  opacity: 0.9;
+}
+
+.code-editor {
+  width: 100%;
+  height: 260px;
+  background-color: var(--bg-primary);
+  color: #00ff88;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 14px;
+  font-family: Consolas, Monaco, "Courier New", monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.code-editor:focus {
+  outline: 1px solid var(--accent-color);
+}
+
+.action-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.status-msg {
+  font-size: 13px;
+  color: var(--accent-color);
+  font-weight: 500;
+}
+
+/* --------------------------------------------------------------------------
+   Shortcuts Table
+   -------------------------------------------------------------------------- */
+.shortcuts-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+}
+
+.shortcuts-table th,
+.shortcuts-table td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.shortcuts-table th {
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.shortcuts-table td {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+kbd {
+  display: inline-block;
+  padding: 3px 7px;
+  background-color: var(--bg-hover);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
