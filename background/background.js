@@ -14,6 +14,7 @@ const DEFAULT_SETTINGS = {
   hide_live_chat: true,
   hide_playlist: true,
   full_width_playlist: false,
+  playlist_view_mode: 'grid',
   hide_fundraiser: true,
   hide_transcript_chapters: true,
   group_sidebar_collapsed: false,

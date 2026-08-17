@@ -1,369 +1,639 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Unhook</title>
-  <link rel="stylesheet" href="popup.css">
-</head>
-<body class="theme-dark">
-  <!-- Header -->
-  <header class="header">
-    <div class="brand">
-      <div class="logo-icon">
-        <svg viewBox="0 0 24 24" class="svg-logo">
-          <circle cx="12" cy="12" r="10" stroke="#e62117" stroke-width="2" fill="none" />
-          <polygon points="10,8 10,16 16,12" fill="#e62117" />
-        </svg>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unhook</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body class="theme-dark">
+    <!-- Header -->
+    <header class="header">
+      <div class="brand">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" class="svg-logo">
+            <circle
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="#e62117"
+              stroke-width="2"
+              fill="none"
+            />
+            <polygon points="10,8 10,16 16,12" fill="#e62117" />
+          </svg>
+        </div>
+        <h1 class="brand-title">Unhook</h1>
       </div>
-      <h1 class="brand-title">Unhook</h1>
-    </div>
-    <div class="header-actions">
-      <button id="themeToggleBtn" class="icon-btn" title="Toggle Dark/Light Mode" aria-label="Toggle Theme">
-        <svg viewBox="0 0 24 24" class="svg-icon">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8v16z"/>
-        </svg>
+      <div class="header-actions">
+        <button
+          id="themeToggleBtn"
+          class="icon-btn"
+          title="Toggle Dark/Light Mode"
+          aria-label="Toggle Theme"
+        >
+          <svg viewBox="0 0 24 24" class="svg-icon">
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8v16z"
+            />
+          </svg>
+        </button>
+        <button
+          id="powerToggleBtn"
+          class="icon-btn active"
+          title="Toggle Unhook On/Off"
+          aria-label="Master Power Switch"
+        >
+          <svg viewBox="0 0 24 24" class="svg-icon svg-power">
+            <path
+              d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42C17.99 7.86 19 9.81 19 12c0 3.87-3.13 7-7 7s-7-3.13-7-7c0-2.19 1.01-4.14 2.58-5.42L6.17 5.17C4.23 6.82 3 9.26 3 12c0 4.97 4.03 9 9 9s9-4.03 9-9c0-2.74-1.23-5.18-3.17-6.83z"
+            />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Options Container -->
+    <main class="options-container" id="optionsContainer">
+      <!-- 1. Hide Home Feed -->
+      <div class="option-group">
+        <div class="option-row">
+          <label class="toggle-switch">
+            <input
+              type="checkbox"
+              id="hide_home_feed"
+              data-key="hide_home_feed"
+            />
+            <span class="slider"></span>
+          </label>
+          <span class="option-label" data-target="hide_home_feed"
+            >Hide Home Feed</span
+          >
+        </div>
+        <div class="sub-options-list permanent-sub">
+          <div class="option-row sub-row">
+            <label class="toggle-switch small">
+              <input
+                type="checkbox"
+                id="redirect_to_subscriptions"
+                data-key="redirect_to_subscriptions"
+              />
+              <span class="slider"></span>
+            </label>
+            <span class="option-label" data-target="redirect_to_subscriptions"
+              >Redirect to Subscriptions</span
+            >
+          </div>
+          <div class="option-row sub-row">
+            <label class="toggle-switch small">
+              <input
+                type="checkbox"
+                id="redirect_to_playlist"
+                data-key="redirect_to_playlist"
+              />
+              <span class="slider"></span>
+            </label>
+            <span class="option-label" data-target="redirect_to_playlist"
+              >Redirect to Playlist</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Hide Video Sidebar -->
+      <div class="option-group expandable" id="group_sidebar">
+        <div class="option-row">
+          <label class="toggle-switch">
+            <input type="checkbox" id="hide_sidebar" data-key="hide_sidebar" />
+            <span class="slider"></span>
+          </label>
+          <span class="option-label" data-target="hide_sidebar"
+            >Hide Video Sidebar</span
+          >
+          <button
+            class="expand-btn"
+            data-group="group_sidebar"
+            aria-label="Toggle sub-options"
+            title="Expand / Collapse"
+          >
+            −
+          </button>
+        </div>
+        <div class="sub-options-list">
+          <div class="option-row sub-row">
+            <label class="toggle-switch small">
+              <input
+                type="checkbox"
+                id="hide_recommended"
+                data-key="hide_recommended"
+              />
+              <span class="slider"></span>
+            </label>
+            <span class="option-label" data-target="hide_recommended"
+              >Hide Recommended</span
+            >
+          </div>
+          <div class="option-row sub-row">
+            <label class="toggle-switch small">
+              <input
+                type="checkbox"
+                id="hide_live_chat"
+                data-key="hide_live_chat"
+              />
+              <span class="slider"></span>
+            </label>
+            <span class="option-label" data-target="hide_live_chat"
+              >Hide Live Chat</span
+            >
+          </div>
+          <div class="option-row sub-row">
+            <label class="toggle-switch small">
+              <input
+                type="checkbox"
+                id="hide_playlist"
+                data-key="hide_playlist"
+              />
+              <span class="slider"></span>
+            </label>
+            <span class="option-label" data-target="hide_playlist"
+              >Hide Playlist</span
+            >
+          </div>
+          <div class="option-row sub-row">
+            <label class="toggle-switch small">
+              <input
+                type="checkbox"
+                id="full_width_playlist"
+                data-key="full_width_playlist"
+              />
+              <span class="slider"></span>
+            </label>
+            <span class="option-label" data-target="full_width_playlist"
+              >Full Width Playlist</span
+            >
+          </div>
+          <div
+            class="option-row sub-row playlist-view-mode-container"
+            id="playlistViewModeRow"
+          >
+            <div class="segmented-control" id="playlistViewModeSelector">
+              <button
+                type="button"
+                class="segment-btn active"
+                data-view="grid"
+                title="Cards View (Visual Grid)"
+              >
+                Cards
+              </button>
+              <button
+                type="button"
+                class="segment-btn"
+                data-view="columns"
+                title="Multi-Column View"
+              >
+                Columns
+              </button>
+              <button
+                type="button"
+                class="segment-btn"
+                data-view="compact_grid"
+                title="Compact View"
+              >
+                Compact
+              </button>
+              <button
+                type="button"
+                class="segment-btn"
+                data-view="list"
+                title="Standard List View"
+              >
+                List
+              </button>
+            </div>
+          </div>
+          <div class="option-row sub-row">
+            <label class="toggle-switch small">
+              <input
+                type="checkbox"
+                id="hide_fundraiser"
+                data-key="hide_fundraiser"
+              />
+              <span class="slider"></span>
+            </label>
+            <span class="option-label" data-target="hide_fundraiser"
+              >Hide Fundraiser</span
+            >
+          </div>
+          <div class="option-row sub-row">
+            <label class="toggle-switch small">
+              <input
+                type="checkbox"
+                id="hide_transcript_chapters"
+                data-key="hide_transcript_chapters"
+              />
+              <span class="slider"></span>
+            </label>
+            <span class="option-label" data-target="hide_transcript_chapters"
+              >Hide Transcript, Chapters</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Hide End Screen Feed -->
+      <div class="option-group">
+        <div class="option-row">
+          <label class="toggle-switch">
+            <input
+              type="checkbox"
+              id="hide_endscreen_feed"
+              data-key="hide_endscreen_feed"
+            />
+            <span class="slider"></span>
+          </label>
+          <span class="option-label" data-target="hide_endscreen_feed"
+            >Hide End Screen Feed</span
+          >
+        </div>
+      </div>
+
+      <!-- 4. Hide End Screen Cards -->
+      <div class="option-group">
+        <div class="option-row">
+          <label class="toggle-switch">
+            <input
+              type="checkbox"
+              id="hide_endscreen_cards"
+              data-key="hide_endscreen_cards"
+            />
+            <span class="slider"></span>
+          </label>
+          <span class="option-label" data-target="hide_endscreen_cards"
+            >Hide End Screen Cards</span
+          >
+        </div>
+      </div>
+
+      <!-- 5. Hide Comments -->
+      <div class="option-group expandable collapsed" id="group_comments">
+        <div class="option-row">
+          <label class="toggle-switch">
+            <input
+              type="checkbox"
+              id="hide_comments"
+              data-key="hide_comments"
+            />
+            <span class="slider"></span>
+          </label>
+          <span class="option-label" data-target="hide_comments"
+            >Hide Comments</span
+          >
+          <button
+            class="expand-btn"
+            data-group="group_comments"
+            aria-label="Toggle sub-options"
+            title="Expand / Collapse"
+          >
+            +
+          </button>
+        </div>
+        <div class="sub-options-list">
+          <div class="option-row sub-row">
+            <label class="toggle-switch small">
+              <input
+                type="checkbox"
+                id="hide_comment_previews"
+                data-key="hide_comment_previews"
+              />
+              <span class="slider"></span>
+            </label>
+            <span class="option-label" data-target="hide_comment_previews"
+              >Hide Comment Previews / Teasers</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Hide Mixes -->
+      <div class="option-group">
+        <div class="option-row">
+          <label class="toggle-switch">
+            <input type="checkbox" id="hide_mixes" data-key="hide_mixes" />
+            <span class="slider"></span>
+          </label>
+          <span class="option-label" data-target="hide_mixes">Hide Mixes</span>
+        </div>
+      </div>
+
+      <!-- 7. Hide Merch, Tickets, Offers -->
+      <div class="option-group">
+        <div class="option-row">
+          <label class="toggle-switch">
+            <input type="checkbox" id="hide_merch" data-key="hide_merch" />
+            <span class="slider"></span>
+          </label>
+          <span class="option-label" data-target="hide_merch"
+            >Hide Merch, Tickets, Offers</span
+          >
+        </div>
+      </div>
+
+      <!-- 8. Hide Video Info -->
+      <div class="option-group expandable collapsed" id="group_video_info">
+        <div class="option-row">
+          <label class="toggle-switch">
+            <input
+              type="checkbox"
+              id="hide_video_info"
+              data-key="hide_video_info"
+            />
+            <span class="slider"></span>
+          </label>
+          <span class="option-label" data-target="hide_video_info"
+            >Hide Video Info</span
+          >
+          <button
+            class="expand-btn"
+            data-group="group_video_info"
+            aria-label="Toggle sub-options"
+            title="Expand / Collapse"
+          >
+            +
+          </button>
+        </div>
+        <div class="sub-options-list">
+          <div class="option-row sub-row">
+            <label class="toggle-switch small">
+              <input
+                type="checkbox"
+                id="hide_buttons_bar"
+                data-key="hide_buttons_bar"
+              />
+              <span class="slider"></span>
+            </label>
+            <span class="option-label" data-target="hide_buttons_bar"
+              >Hide Video Buttons Bar</span
+            >
+          </div>
+          <div class="option-row sub-row">
+            <label class="toggle-switch small">
+              <input
+                type="checkbox"
+                id="hide_channel"
+                data-key="hide_channel"
+              />
+              <span class="slider"></span>
+            </label>
+            <span class="option-label" data-target="hide_channel"
+              >Hide Channel</span
+            >
+          </div>
+          <div class="option-row sub-row">
+            <label class="toggle-switch small">
+              <input
+                type="checkbox"
+                id="hide_description"
+                data-key="hide_description"
+              />
+              <span class="slider"></span>
+            </label>
+            <span class="option-label" data-target="hide_description"
+              >Hide Video Description</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- 9. Hide Top Header -->
+      <div class="option-group expandable" id="group_header">
+        <div class="option-row">
+          <label class="toggle-switch">
+            <input
+              type="checkbox"
+              id="hide_top_header"
+              data-key="hide_top_header"
+            />
+            <span class="slider"></span>
+          </label>
+          <span class="option-label" data-target="hide_top_header"
+            >Hide Top Header</span
+          >
+          <button
+            class="expand-btn"
+            data-group="group_header"
+            aria-label="Toggle sub-options"
+            title="Expand / Collapse"
+          >
+            −
+          </button>
+        </div>
+        <div class="sub-options-list">
+          <div class="option-row sub-row">
+            <label class="toggle-switch small">
+              <input
+                type="checkbox"
+                id="hide_notifications"
+                data-key="hide_notifications"
+              />
+              <span class="slider"></span>
+            </label>
+            <span class="option-label" data-target="hide_notifications"
+              >Hide Notifications</span
+            >
+          </div>
+          <div class="option-row sub-row">
+            <label class="toggle-switch small">
+              <input
+                type="checkbox"
+                id="hide_search_bar"
+                data-key="hide_search_bar"
+              />
+              <span class="slider"></span>
+            </label>
+            <span class="option-label" data-target="hide_search_bar"
+              >Hide Search Bar</span
+            >
+          </div>
+          <div class="option-row sub-row">
+            <label class="toggle-switch small">
+              <input
+                type="checkbox"
+                id="hide_voice_search"
+                data-key="hide_voice_search"
+              />
+              <span class="slider"></span>
+            </label>
+            <span class="option-label" data-target="hide_voice_search"
+              >Hide Voice Search</span
+            >
+          </div>
+          <div class="option-row sub-row">
+            <label class="toggle-switch small">
+              <input
+                type="checkbox"
+                id="hide_create_button"
+                data-key="hide_create_button"
+              />
+              <span class="slider"></span>
+            </label>
+            <span class="option-label" data-target="hide_create_button"
+              >Hide Create Button</span
+            >
+          </div>
+          <div class="option-row sub-row">
+            <label class="toggle-switch small">
+              <input
+                type="checkbox"
+                id="hide_user_avatar"
+                data-key="hide_user_avatar"
+              />
+              <span class="slider"></span>
+            </label>
+            <span class="option-label" data-target="hide_user_avatar"
+              >Hide User Avatar</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- 10. Hide Inapt Search Results -->
+      <div class="option-group">
+        <div class="option-row">
+          <label class="toggle-switch">
+            <input
+              type="checkbox"
+              id="hide_inapt_search_results"
+              data-key="hide_inapt_search_results"
+            />
+            <span class="slider"></span>
+          </label>
+          <span class="option-label" data-target="hide_inapt_search_results"
+            >Hide Inapt Search Results</span
+          >
+        </div>
+      </div>
+
+      <!-- 11. Hide Explore, Trending -->
+      <div class="option-group">
+        <div class="option-row">
+          <label class="toggle-switch">
+            <input
+              type="checkbox"
+              id="hide_explore_trending"
+              data-key="hide_explore_trending"
+            />
+            <span class="slider"></span>
+          </label>
+          <span class="option-label" data-target="hide_explore_trending"
+            >Hide Explore, Trending</span
+          >
+        </div>
+      </div>
+
+      <!-- 12. Hide More from YouTube -->
+      <div class="option-group">
+        <div class="option-row">
+          <label class="toggle-switch">
+            <input
+              type="checkbox"
+              id="hide_more_from_youtube"
+              data-key="hide_more_from_youtube"
+            />
+            <span class="slider"></span>
+          </label>
+          <span class="option-label" data-target="hide_more_from_youtube"
+            >Hide More from YouTube</span
+          >
+        </div>
+      </div>
+
+      <!-- 13. Hide Shorts Tab -->
+      <div class="option-group">
+        <div class="option-row">
+          <label class="toggle-switch">
+            <input type="checkbox" id="hide_shorts" data-key="hide_shorts" />
+            <span class="slider"></span>
+          </label>
+          <span class="option-label" data-target="hide_shorts"
+            >Hide Shorts Tab</span
+          >
+        </div>
+      </div>
+
+      <!-- 14. Hide Subscriptions -->
+      <div class="option-group">
+        <div class="option-row">
+          <label class="toggle-switch">
+            <input
+              type="checkbox"
+              id="hide_subscriptions"
+              data-key="hide_subscriptions"
+            />
+            <span class="slider"></span>
+          </label>
+          <span class="option-label" data-target="hide_subscriptions"
+            >Hide Subscriptions</span
+          >
+        </div>
+      </div>
+
+      <!-- 15. Disable Autoplay -->
+      <div class="option-group">
+        <div class="option-row">
+          <label class="toggle-switch">
+            <input
+              type="checkbox"
+              id="disable_autoplay"
+              data-key="disable_autoplay"
+            />
+            <span class="slider"></span>
+          </label>
+          <span class="option-label" data-target="disable_autoplay"
+            >Disable Autoplay</span
+          >
+        </div>
+      </div>
+
+      <!-- 16. Disable Annotations -->
+      <div class="option-group">
+        <div class="option-row">
+          <label class="toggle-switch">
+            <input
+              type="checkbox"
+              id="disable_annotations"
+              data-key="disable_annotations"
+            />
+            <span class="slider"></span>
+          </label>
+          <span class="option-label" data-target="disable_annotations"
+            >Disable Annotations</span
+          >
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <button id="donateBtn" class="footer-link">Donate</button>
+      <button id="requestFeatureBtn" class="footer-link">
+        Request Feature
       </button>
-      <button id="powerToggleBtn" class="icon-btn active" title="Toggle Unhook On/Off" aria-label="Master Power Switch">
-        <svg viewBox="0 0 24 24" class="svg-icon svg-power">
-          <path d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42C17.99 7.86 19 9.81 19 12c0 3.87-3.13 7-7 7s-7-3.13-7-7c0-2.19 1.01-4.14 2.58-5.42L6.17 5.17C4.23 6.82 3 9.26 3 12c0 4.97 4.03 9 9 9s9-4.03 9-9c0-2.74-1.23-5.18-3.17-6.83z"/>
-        </svg>
-      </button>
-    </div>
-  </header>
+      <button id="supportBtn" class="footer-link">Support</button>
+    </footer>
 
-  <!-- Options Container -->
-  <main class="options-container" id="optionsContainer">
-    <!-- 1. Hide Home Feed -->
-    <div class="option-group">
-      <div class="option-row">
-        <label class="toggle-switch">
-          <input type="checkbox" id="hide_home_feed" data-key="hide_home_feed">
-          <span class="slider"></span>
-        </label>
-        <span class="option-label" data-target="hide_home_feed">Hide Home Feed</span>
-      </div>
-      <div class="sub-options-list permanent-sub">
-        <div class="option-row sub-row">
-          <label class="toggle-switch small">
-            <input type="checkbox" id="redirect_to_subscriptions" data-key="redirect_to_subscriptions">
-            <span class="slider"></span>
-          </label>
-          <span class="option-label" data-target="redirect_to_subscriptions">Redirect to Subscriptions</span>
+    <!-- Modal / Dialog Backdrop -->
+    <div id="modalOverlay" class="modal-overlay hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3 id="modalTitle">Information</h3>
+          <button id="modalCloseBtn" class="modal-close-btn">&times;</button>
         </div>
-        <div class="option-row sub-row">
-          <label class="toggle-switch small">
-            <input type="checkbox" id="redirect_to_playlist" data-key="redirect_to_playlist">
-            <span class="slider"></span>
-          </label>
-          <span class="option-label" data-target="redirect_to_playlist">Redirect to Playlist</span>
+        <div class="modal-body" id="modalBody">
+          <!-- Dynamic content injected by popup.js -->
         </div>
       </div>
     </div>
 
-    <!-- 2. Hide Video Sidebar -->
-    <div class="option-group expandable" id="group_sidebar">
-      <div class="option-row">
-        <label class="toggle-switch">
-          <input type="checkbox" id="hide_sidebar" data-key="hide_sidebar">
-          <span class="slider"></span>
-        </label>
-        <span class="option-label" data-target="hide_sidebar">Hide Video Sidebar</span>
-        <button class="expand-btn" data-group="group_sidebar" aria-label="Toggle sub-options" title="Expand / Collapse">−</button>
-      </div>
-      <div class="sub-options-list">
-        <div class="option-row sub-row">
-          <label class="toggle-switch small">
-            <input type="checkbox" id="hide_recommended" data-key="hide_recommended">
-            <span class="slider"></span>
-          </label>
-          <span class="option-label" data-target="hide_recommended">Hide Recommended</span>
-        </div>
-        <div class="option-row sub-row">
-          <label class="toggle-switch small">
-            <input type="checkbox" id="hide_live_chat" data-key="hide_live_chat">
-            <span class="slider"></span>
-          </label>
-          <span class="option-label" data-target="hide_live_chat">Hide Live Chat</span>
-        </div>
-        <div class="option-row sub-row">
-          <label class="toggle-switch small">
-            <input type="checkbox" id="hide_playlist" data-key="hide_playlist">
-            <span class="slider"></span>
-          </label>
-          <span class="option-label" data-target="hide_playlist">Hide Playlist</span>
-        </div>
-        <div class="option-row sub-row">
-          <label class="toggle-switch small">
-            <input type="checkbox" id="full_width_playlist" data-key="full_width_playlist">
-            <span class="slider"></span>
-          </label>
-          <span class="option-label" data-target="full_width_playlist">Full Width Playlist</span>
-        </div>
-        <div class="option-row sub-row">
-          <label class="toggle-switch small">
-            <input type="checkbox" id="hide_fundraiser" data-key="hide_fundraiser">
-            <span class="slider"></span>
-          </label>
-          <span class="option-label" data-target="hide_fundraiser">Hide Fundraiser</span>
-        </div>
-        <div class="option-row sub-row">
-          <label class="toggle-switch small">
-            <input type="checkbox" id="hide_transcript_chapters" data-key="hide_transcript_chapters">
-            <span class="slider"></span>
-          </label>
-          <span class="option-label" data-target="hide_transcript_chapters">Hide Transcript, Chapters</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- 3. Hide End Screen Feed -->
-    <div class="option-group">
-      <div class="option-row">
-        <label class="toggle-switch">
-          <input type="checkbox" id="hide_endscreen_feed" data-key="hide_endscreen_feed">
-          <span class="slider"></span>
-        </label>
-        <span class="option-label" data-target="hide_endscreen_feed">Hide End Screen Feed</span>
-      </div>
-    </div>
-
-    <!-- 4. Hide End Screen Cards -->
-    <div class="option-group">
-      <div class="option-row">
-        <label class="toggle-switch">
-          <input type="checkbox" id="hide_endscreen_cards" data-key="hide_endscreen_cards">
-          <span class="slider"></span>
-        </label>
-        <span class="option-label" data-target="hide_endscreen_cards">Hide End Screen Cards</span>
-      </div>
-    </div>
-
-    <!-- 5. Hide Comments -->
-    <div class="option-group expandable collapsed" id="group_comments">
-      <div class="option-row">
-        <label class="toggle-switch">
-          <input type="checkbox" id="hide_comments" data-key="hide_comments">
-          <span class="slider"></span>
-        </label>
-        <span class="option-label" data-target="hide_comments">Hide Comments</span>
-        <button class="expand-btn" data-group="group_comments" aria-label="Toggle sub-options" title="Expand / Collapse">+</button>
-      </div>
-      <div class="sub-options-list">
-        <div class="option-row sub-row">
-          <label class="toggle-switch small">
-            <input type="checkbox" id="hide_comment_previews" data-key="hide_comment_previews">
-            <span class="slider"></span>
-          </label>
-          <span class="option-label" data-target="hide_comment_previews">Hide Comment Previews / Teasers</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- 6. Hide Mixes -->
-    <div class="option-group">
-      <div class="option-row">
-        <label class="toggle-switch">
-          <input type="checkbox" id="hide_mixes" data-key="hide_mixes">
-          <span class="slider"></span>
-        </label>
-        <span class="option-label" data-target="hide_mixes">Hide Mixes</span>
-      </div>
-    </div>
-
-    <!-- 7. Hide Merch, Tickets, Offers -->
-    <div class="option-group">
-      <div class="option-row">
-        <label class="toggle-switch">
-          <input type="checkbox" id="hide_merch" data-key="hide_merch">
-          <span class="slider"></span>
-        </label>
-        <span class="option-label" data-target="hide_merch">Hide Merch, Tickets, Offers</span>
-      </div>
-    </div>
-
-    <!-- 8. Hide Video Info -->
-    <div class="option-group expandable collapsed" id="group_video_info">
-      <div class="option-row">
-        <label class="toggle-switch">
-          <input type="checkbox" id="hide_video_info" data-key="hide_video_info">
-          <span class="slider"></span>
-        </label>
-        <span class="option-label" data-target="hide_video_info">Hide Video Info</span>
-        <button class="expand-btn" data-group="group_video_info" aria-label="Toggle sub-options" title="Expand / Collapse">+</button>
-      </div>
-      <div class="sub-options-list">
-        <div class="option-row sub-row">
-          <label class="toggle-switch small">
-            <input type="checkbox" id="hide_buttons_bar" data-key="hide_buttons_bar">
-            <span class="slider"></span>
-          </label>
-          <span class="option-label" data-target="hide_buttons_bar">Hide Video Buttons Bar</span>
-        </div>
-        <div class="option-row sub-row">
-          <label class="toggle-switch small">
-            <input type="checkbox" id="hide_channel" data-key="hide_channel">
-            <span class="slider"></span>
-          </label>
-          <span class="option-label" data-target="hide_channel">Hide Channel</span>
-        </div>
-        <div class="option-row sub-row">
-          <label class="toggle-switch small">
-            <input type="checkbox" id="hide_description" data-key="hide_description">
-            <span class="slider"></span>
-          </label>
-          <span class="option-label" data-target="hide_description">Hide Video Description</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- 9. Hide Top Header -->
-    <div class="option-group expandable" id="group_header">
-      <div class="option-row">
-        <label class="toggle-switch">
-          <input type="checkbox" id="hide_top_header" data-key="hide_top_header">
-          <span class="slider"></span>
-        </label>
-        <span class="option-label" data-target="hide_top_header">Hide Top Header</span>
-        <button class="expand-btn" data-group="group_header" aria-label="Toggle sub-options" title="Expand / Collapse">−</button>
-      </div>
-      <div class="sub-options-list">
-        <div class="option-row sub-row">
-          <label class="toggle-switch small">
-            <input type="checkbox" id="hide_notifications" data-key="hide_notifications">
-            <span class="slider"></span>
-          </label>
-          <span class="option-label" data-target="hide_notifications">Hide Notifications</span>
-        </div>
-        <div class="option-row sub-row">
-          <label class="toggle-switch small">
-            <input type="checkbox" id="hide_search_bar" data-key="hide_search_bar">
-            <span class="slider"></span>
-          </label>
-          <span class="option-label" data-target="hide_search_bar">Hide Search Bar</span>
-        </div>
-        <div class="option-row sub-row">
-          <label class="toggle-switch small">
-            <input type="checkbox" id="hide_voice_search" data-key="hide_voice_search">
-            <span class="slider"></span>
-          </label>
-          <span class="option-label" data-target="hide_voice_search">Hide Voice Search</span>
-        </div>
-        <div class="option-row sub-row">
-          <label class="toggle-switch small">
-            <input type="checkbox" id="hide_create_button" data-key="hide_create_button">
-            <span class="slider"></span>
-          </label>
-          <span class="option-label" data-target="hide_create_button">Hide Create Button</span>
-        </div>
-        <div class="option-row sub-row">
-          <label class="toggle-switch small">
-            <input type="checkbox" id="hide_user_avatar" data-key="hide_user_avatar">
-            <span class="slider"></span>
-          </label>
-          <span class="option-label" data-target="hide_user_avatar">Hide User Avatar</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- 10. Hide Inapt Search Results -->
-    <div class="option-group">
-      <div class="option-row">
-        <label class="toggle-switch">
-          <input type="checkbox" id="hide_inapt_search_results" data-key="hide_inapt_search_results">
-          <span class="slider"></span>
-        </label>
-        <span class="option-label" data-target="hide_inapt_search_results">Hide Inapt Search Results</span>
-      </div>
-    </div>
-
-    <!-- 11. Hide Explore, Trending -->
-    <div class="option-group">
-      <div class="option-row">
-        <label class="toggle-switch">
-          <input type="checkbox" id="hide_explore_trending" data-key="hide_explore_trending">
-          <span class="slider"></span>
-        </label>
-        <span class="option-label" data-target="hide_explore_trending">Hide Explore, Trending</span>
-      </div>
-    </div>
-
-    <!-- 12. Hide More from YouTube -->
-    <div class="option-group">
-      <div class="option-row">
-        <label class="toggle-switch">
-          <input type="checkbox" id="hide_more_from_youtube" data-key="hide_more_from_youtube">
-          <span class="slider"></span>
-        </label>
-        <span class="option-label" data-target="hide_more_from_youtube">Hide More from YouTube</span>
-      </div>
-    </div>
-
-    <!-- 13. Hide Shorts Tab -->
-    <div class="option-group">
-      <div class="option-row">
-        <label class="toggle-switch">
-          <input type="checkbox" id="hide_shorts" data-key="hide_shorts">
-          <span class="slider"></span>
-        </label>
-        <span class="option-label" data-target="hide_shorts">Hide Shorts Tab</span>
-      </div>
-    </div>
-
-    <!-- 14. Hide Subscriptions -->
-    <div class="option-group">
-      <div class="option-row">
-        <label class="toggle-switch">
-          <input type="checkbox" id="hide_subscriptions" data-key="hide_subscriptions">
-          <span class="slider"></span>
-        </label>
-        <span class="option-label" data-target="hide_subscriptions">Hide Subscriptions</span>
-      </div>
-    </div>
-
-    <!-- 15. Disable Autoplay -->
-    <div class="option-group">
-      <div class="option-row">
-        <label class="toggle-switch">
-          <input type="checkbox" id="disable_autoplay" data-key="disable_autoplay">
-          <span class="slider"></span>
-        </label>
-        <span class="option-label" data-target="disable_autoplay">Disable Autoplay</span>
-      </div>
-    </div>
-
-    <!-- 16. Disable Annotations -->
-    <div class="option-group">
-      <div class="option-row">
-        <label class="toggle-switch">
-          <input type="checkbox" id="disable_annotations" data-key="disable_annotations">
-          <span class="slider"></span>
-        </label>
-        <span class="option-label" data-target="disable_annotations">Disable Annotations</span>
-      </div>
-    </div>
-  </main>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <button id="donateBtn" class="footer-link">Donate</button>
-    <button id="requestFeatureBtn" class="footer-link">Request Feature</button>
-    <button id="supportBtn" class="footer-link">Support</button>
-  </footer>
-
-  <!-- Modal / Dialog Backdrop -->
-  <div id="modalOverlay" class="modal-overlay hidden">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3 id="modalTitle">Information</h3>
-        <button id="modalCloseBtn" class="modal-close-btn">&times;</button>
-      </div>
-      <div class="modal-body" id="modalBody">
-        <!-- Dynamic content injected by popup.js -->
-      </div>
-    </div>
-  </div>
-
-  <script src="popup.js"></script>
-</body>
+    <script src="popup.js"></script>
+  </body>
 </html>

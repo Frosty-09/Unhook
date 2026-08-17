@@ -4,13 +4,13 @@
 
 const DEFAULT_SETTINGS = {
   extension_enabled: true,
-  theme: 'dark',
+  theme: "dark",
 
   // 1. Home Feed
   hide_home_feed: true,
   redirect_to_subscriptions: false,
   redirect_to_playlist: false,
-  custom_playlist_url: 'https://www.youtube.com/feed/playlists',
+  custom_playlist_url: "https://www.youtube.com/feed/playlists",
 
   // 2. Video Sidebar
   hide_sidebar: true,
@@ -18,6 +18,7 @@ const DEFAULT_SETTINGS = {
   hide_live_chat: true,
   hide_playlist: true,
   full_width_playlist: false,
+  playlist_view_mode: "grid", // 'grid' | 'columns' | 'compact_grid' | 'list'
   hide_fundraiser: true,
   hide_transcript_chapters: true,
   group_sidebar_collapsed: false,
@@ -77,13 +78,17 @@ const DEFAULT_SETTINGS = {
   disable_annotations: true,
 
   // Custom CSS
-  custom_css: ''
+  custom_css: "",
 };
 
 // Safe storage wrapper
 const storage = {
   get: (keys, callback) => {
-    if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.sync) {
+    if (
+      typeof chrome !== "undefined" &&
+      chrome.storage &&
+      chrome.storage.sync
+    ) {
       chrome.storage.sync.get(keys, (items) => {
         if (chrome.runtime.lastError) {
           chrome.storage.local.get(keys, callback);
@@ -91,21 +96,38 @@ const storage = {
           callback(items);
         }
       });
-    } else if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+    } else if (
+      typeof chrome !== "undefined" &&
+      chrome.storage &&
+      chrome.storage.local
+    ) {
       chrome.storage.local.get(keys, callback);
     } else {
       // Fallback for standalone/mock preview
       const res = {};
-      const targetKeys = Array.isArray(keys) ? keys : (typeof keys === 'string' ? [keys] : Object.keys(keys || {}));
-      targetKeys.forEach(k => {
-        const val = localStorage.getItem('unhook_' + k);
-        res[k] = val !== null ? JSON.parse(val) : (DEFAULT_SETTINGS[k] !== undefined ? DEFAULT_SETTINGS[k] : null);
+      const targetKeys = Array.isArray(keys)
+        ? keys
+        : typeof keys === "string"
+          ? [keys]
+          : Object.keys(keys || {});
+      targetKeys.forEach((k) => {
+        const val = localStorage.getItem("unhook_" + k);
+        res[k] =
+          val !== null
+            ? JSON.parse(val)
+            : DEFAULT_SETTINGS[k] !== undefined
+              ? DEFAULT_SETTINGS[k]
+              : null;
       });
       callback(res);
     }
   },
   set: (items, callback) => {
-    if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.sync) {
+    if (
+      typeof chrome !== "undefined" &&
+      chrome.storage &&
+      chrome.storage.sync
+    ) {
       chrome.storage.sync.set(items, () => {
         if (chrome.runtime.lastError) {
           chrome.storage.local.set(items, callback);
@@ -113,84 +135,127 @@ const storage = {
           callback();
         }
       });
-    } else if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+    } else if (
+      typeof chrome !== "undefined" &&
+      chrome.storage &&
+      chrome.storage.local
+    ) {
       chrome.storage.local.set(items, callback);
     } else {
       Object.entries(items).forEach(([k, v]) => {
-        localStorage.setItem('unhook_' + k, JSON.stringify(v));
+        localStorage.setItem("unhook_" + k, JSON.stringify(v));
       });
       if (callback) callback();
     }
-  }
+  },
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-  const themeToggleBtn = document.getElementById('themeToggleBtn');
-  const powerToggleBtn = document.getElementById('powerToggleBtn');
-  const expandButtons = document.querySelectorAll('.expand-btn');
+document.addEventListener("DOMContentLoaded", () => {
+  const themeToggleBtn = document.getElementById("themeToggleBtn");
+  const powerToggleBtn = document.getElementById("powerToggleBtn");
+  const expandButtons = document.querySelectorAll(".expand-btn");
   const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-  const labelSpans = document.querySelectorAll('.option-label');
+  const labelSpans = document.querySelectorAll(".option-label");
 
   // Load current settings from storage
   storage.get(DEFAULT_SETTINGS, (settings) => {
     const current = Object.assign({}, DEFAULT_SETTINGS, settings);
 
     // Apply Theme
-    applyTheme(current.theme || 'dark');
+    applyTheme(current.theme || "dark");
 
     // Apply Master Enabled State
     applyPowerState(current.extension_enabled !== false);
 
     // Apply Checkboxes
-    checkboxes.forEach(cb => {
+    checkboxes.forEach((cb) => {
       const key = cb.dataset.key;
       if (key && current[key] !== undefined) {
         cb.checked = Boolean(current[key]);
       }
     });
 
+    // Apply Playlist View Mode
+    const activeView = current.playlist_view_mode || "grid";
+    const segmentBtns = document.querySelectorAll(
+      "#playlistViewModeSelector .segment-btn",
+    );
+    segmentBtns.forEach((btn) => {
+      if (btn.dataset.view === activeView) {
+        btn.classList.add("active");
+      } else {
+        btn.classList.remove("active");
+      }
+    });
+
     // Apply Accordion States
-    applyAccordionState('group_sidebar', current.group_sidebar_collapsed);
-    applyAccordionState('group_comments', current.group_comments_collapsed !== false);
-    applyAccordionState('group_video_info', current.group_video_info_collapsed !== false);
-    applyAccordionState('group_header', current.group_header_collapsed);
+    applyAccordionState("group_sidebar", current.group_sidebar_collapsed);
+    applyAccordionState(
+      "group_comments",
+      current.group_comments_collapsed !== false,
+    );
+    applyAccordionState(
+      "group_video_info",
+      current.group_video_info_collapsed !== false,
+    );
+    applyAccordionState("group_header", current.group_header_collapsed);
+  });
+
+  // Segmented control buttons for Playlist View Mode
+  const segmentBtns = document.querySelectorAll(
+    "#playlistViewModeSelector .segment-btn",
+  );
+  segmentBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      segmentBtns.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      const viewMode = btn.dataset.view;
+      storage.set({ playlist_view_mode: viewMode });
+
+      // Automatically ensure full width playlist is enabled if user selects a view mode
+      const fullWidthCb = document.getElementById("full_width_playlist");
+      if (fullWidthCb && !fullWidthCb.checked) {
+        fullWidthCb.checked = true;
+        fullWidthCb.dispatchEvent(new Event("change"));
+      }
+    });
   });
 
   // Checkbox change handlers
-  checkboxes.forEach(cb => {
-    cb.addEventListener('change', (e) => {
+  checkboxes.forEach((cb) => {
+    cb.addEventListener("change", (e) => {
       const key = cb.dataset.key;
       if (key) {
         const update = {};
         update[key] = cb.checked;
 
         // Mutual exclusivity for redirect options
-        if (key === 'redirect_to_subscriptions' && cb.checked) {
-          const playlistCb = document.getElementById('redirect_to_playlist');
+        if (key === "redirect_to_subscriptions" && cb.checked) {
+          const playlistCb = document.getElementById("redirect_to_playlist");
           if (playlistCb && playlistCb.checked) {
             playlistCb.checked = false;
-            update['redirect_to_playlist'] = false;
+            update["redirect_to_playlist"] = false;
           }
-        } else if (key === 'redirect_to_playlist' && cb.checked) {
-          const subCb = document.getElementById('redirect_to_subscriptions');
+        } else if (key === "redirect_to_playlist" && cb.checked) {
+          const subCb = document.getElementById("redirect_to_subscriptions");
           if (subCb && subCb.checked) {
             subCb.checked = false;
-            update['redirect_to_subscriptions'] = false;
+            update["redirect_to_subscriptions"] = false;
           }
         }
 
         // Mutual exclusivity for playlist options
-        if (key === 'full_width_playlist' && cb.checked) {
-          const hidePlaylistCb = document.getElementById('hide_playlist');
+        if (key === "full_width_playlist" && cb.checked) {
+          const hidePlaylistCb = document.getElementById("hide_playlist");
           if (hidePlaylistCb && hidePlaylistCb.checked) {
             hidePlaylistCb.checked = false;
-            update['hide_playlist'] = false;
+            update["hide_playlist"] = false;
           }
-        } else if (key === 'hide_playlist' && cb.checked) {
-          const fullWidthCb = document.getElementById('full_width_playlist');
+        } else if (key === "hide_playlist" && cb.checked) {
+          const fullWidthCb = document.getElementById("full_width_playlist");
           if (fullWidthCb && fullWidthCb.checked) {
             fullWidthCb.checked = false;
-            update['full_width_playlist'] = false;
+            update["full_width_playlist"] = false;
           }
         }
 
@@ -200,31 +265,31 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Click on option label toggles checkbox
-  labelSpans.forEach(label => {
-    label.addEventListener('click', (e) => {
+  labelSpans.forEach((label) => {
+    label.addEventListener("click", (e) => {
       const targetId = label.dataset.target;
       if (targetId) {
         const targetCb = document.getElementById(targetId);
         if (targetCb) {
           targetCb.checked = !targetCb.checked;
-          targetCb.dispatchEvent(new Event('change'));
+          targetCb.dispatchEvent(new Event("change"));
         }
       }
     });
   });
 
   // Expand / Collapse Buttons
-  expandButtons.forEach(btn => {
-    btn.addEventListener('click', (e) => {
+  expandButtons.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
       e.stopPropagation();
       const groupId = btn.dataset.group;
       const groupEl = document.getElementById(groupId);
       if (groupEl) {
-        const isCollapsed = groupEl.classList.toggle('collapsed');
-        btn.textContent = isCollapsed ? '+' : '−';
-        
+        const isCollapsed = groupEl.classList.toggle("collapsed");
+        btn.textContent = isCollapsed ? "+" : "−";
+
         // Save accordion state
-        const storageKey = groupId + '_collapsed';
+        const storageKey = groupId + "_collapsed";
         const update = {};
         update[storageKey] = isCollapsed;
         storage.set(update);
@@ -234,9 +299,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Theme Toggle Button
   if (themeToggleBtn) {
-    themeToggleBtn.addEventListener('click', () => {
-      const isCurrentlyDark = document.body.classList.contains('theme-dark') || !document.body.classList.contains('theme-light');
-      const newTheme = isCurrentlyDark ? 'light' : 'dark';
+    themeToggleBtn.addEventListener("click", () => {
+      const isCurrentlyDark =
+        document.body.classList.contains("theme-dark") ||
+        !document.body.classList.contains("theme-light");
+      const newTheme = isCurrentlyDark ? "light" : "dark";
       applyTheme(newTheme);
       storage.set({ theme: newTheme });
     });
@@ -244,8 +311,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Master Power Toggle Button
   if (powerToggleBtn) {
-    powerToggleBtn.addEventListener('click', () => {
-      const currentlyEnabled = !document.body.classList.contains('disabled');
+    powerToggleBtn.addEventListener("click", () => {
+      const currentlyEnabled = !document.body.classList.contains("disabled");
       const newState = !currentlyEnabled;
       applyPowerState(newState);
       storage.set({ extension_enabled: newState });
@@ -254,25 +321,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Helper: Apply Theme
   function applyTheme(theme) {
-    if (theme === 'light') {
-      document.body.classList.remove('theme-dark');
-      document.body.classList.add('theme-light');
+    if (theme === "light") {
+      document.body.classList.remove("theme-dark");
+      document.body.classList.add("theme-light");
     } else {
-      document.body.classList.remove('theme-light');
-      document.body.classList.add('theme-dark');
+      document.body.classList.remove("theme-light");
+      document.body.classList.add("theme-dark");
     }
   }
 
   // Helper: Apply Power State
   function applyPowerState(enabled) {
     if (enabled) {
-      document.body.classList.remove('disabled');
-      powerToggleBtn.classList.add('active');
-      powerToggleBtn.title = 'Unhook is ON (Click to turn OFF)';
+      document.body.classList.remove("disabled");
+      powerToggleBtn.classList.add("active");
+      powerToggleBtn.title = "Unhook is ON (Click to turn OFF)";
     } else {
-      document.body.classList.add('disabled');
-      powerToggleBtn.classList.remove('active');
-      powerToggleBtn.title = 'Unhook is OFF (Click to turn ON)';
+      document.body.classList.add("disabled");
+      powerToggleBtn.classList.remove("active");
+      powerToggleBtn.title = "Unhook is OFF (Click to turn ON)";
     }
   }
 
@@ -280,89 +347,107 @@ document.addEventListener('DOMContentLoaded', () => {
   function applyAccordionState(groupId, isCollapsed) {
     const groupEl = document.getElementById(groupId);
     if (!groupEl) return;
-    const btn = groupEl.querySelector('.expand-btn');
+    const btn = groupEl.querySelector(".expand-btn");
     if (isCollapsed) {
-      groupEl.classList.add('collapsed');
-      if (btn) btn.textContent = '+';
+      groupEl.classList.add("collapsed");
+      if (btn) btn.textContent = "+";
     } else {
-      groupEl.classList.remove('collapsed');
-      if (btn) btn.textContent = '−';
+      groupEl.classList.remove("collapsed");
+      if (btn) btn.textContent = "−";
     }
   }
 
   // --------------------------------------------------------------------------
   // Footer & Modals
   // --------------------------------------------------------------------------
-  const modalOverlay = document.getElementById('modalOverlay');
-  const modalTitle = document.getElementById('modalTitle');
-  const modalBody = document.getElementById('modalBody');
-  const modalCloseBtn = document.getElementById('modalCloseBtn');
-  const donateBtn = document.getElementById('donateBtn');
-  const requestFeatureBtn = document.getElementById('requestFeatureBtn');
-  const supportBtn = document.getElementById('supportBtn');
+  const modalOverlay = document.getElementById("modalOverlay");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalBody = document.getElementById("modalBody");
+  const modalCloseBtn = document.getElementById("modalCloseBtn");
+  const donateBtn = document.getElementById("donateBtn");
+  const requestFeatureBtn = document.getElementById("requestFeatureBtn");
+  const supportBtn = document.getElementById("supportBtn");
 
   function openModal(title, htmlContent) {
     modalTitle.textContent = title;
     modalBody.innerHTML = htmlContent;
-    modalOverlay.classList.remove('hidden');
+    modalOverlay.classList.remove("hidden");
   }
 
   function closeModal() {
-    modalOverlay.classList.add('hidden');
+    modalOverlay.classList.add("hidden");
   }
 
   if (modalCloseBtn) {
-    modalCloseBtn.addEventListener('click', closeModal);
+    modalCloseBtn.addEventListener("click", closeModal);
   }
 
   if (modalOverlay) {
-    modalOverlay.addEventListener('click', (e) => {
+    modalOverlay.addEventListener("click", (e) => {
       if (e.target === modalOverlay) closeModal();
     });
   }
 
   if (donateBtn) {
-    donateBtn.addEventListener('click', () => {
-      openModal('Donate & Support Unhook', `
+    donateBtn.addEventListener("click", () => {
+      openModal(
+        "Donate & Support Unhook",
+        `
         <p>Thank you for using Unhook! If this extension has improved your focus and saved you hours of time, consider supporting independent development.</p>
         <div class="modal-actions">
           <button class="btn-primary" id="openDonateLink">Support on BuyMeACoffee</button>
         </div>
-      `);
-      document.getElementById('openDonateLink')?.addEventListener('click', () => {
-        if (typeof chrome !== 'undefined' && chrome.tabs) {
-          chrome.tabs.create({ url: 'https://buymeacoffee.com' });
-        } else {
-          window.open('https://buymeacoffee.com', '_blank');
-        }
-        closeModal();
-      });
+      `,
+      );
+      document
+        .getElementById("openDonateLink")
+        ?.addEventListener("click", () => {
+          if (typeof chrome !== "undefined" && chrome.tabs) {
+            chrome.tabs.create({ url: "https://buymeacoffee.com" });
+          } else {
+            window.open("https://buymeacoffee.com", "_blank");
+          }
+          closeModal();
+        });
     });
   }
 
   if (requestFeatureBtn) {
-    requestFeatureBtn.addEventListener('click', () => {
-      openModal('Request Feature / Feedback', `
+    requestFeatureBtn.addEventListener("click", () => {
+      openModal(
+        "Request Feature / Feedback",
+        `
         <p>Have an idea to make Unhook even better? Found a YouTube element you want hidden?</p>
         <p>You can also configure custom CSS rules and options in the settings dashboard.</p>
         <div class="modal-actions">
           <button class="btn-primary" id="openOptionsPage">Open Settings Dashboard</button>
         </div>
-      `);
-      document.getElementById('openOptionsPage')?.addEventListener('click', () => {
-        if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.openOptionsPage) {
-          chrome.runtime.openOptionsPage();
-        } else if (typeof chrome !== 'undefined' && chrome.tabs) {
-          chrome.tabs.create({ url: chrome.runtime.getURL('options/options.html') });
-        }
-        closeModal();
-      });
+      `,
+      );
+      document
+        .getElementById("openOptionsPage")
+        ?.addEventListener("click", () => {
+          if (
+            typeof chrome !== "undefined" &&
+            chrome.runtime &&
+            chrome.runtime.openOptionsPage
+          ) {
+            chrome.runtime.openOptionsPage();
+          } else if (typeof chrome !== "undefined" && chrome.tabs) {
+            chrome.tabs.create({
+              url: chrome.runtime.getURL("options/options.html"),
+            });
+          }
+          closeModal();
+        });
     });
   }
 
   if (supportBtn) {
-    supportBtn.addEventListener('click', () => {
-      openModal('Unhook Help & Shortcuts', `
+    supportBtn.addEventListener("click", () => {
+      openModal(
+        "Unhook Help & Shortcuts",
+        `
         <p><strong>Keyboard Shortcuts:</strong></p>
         <ul style="margin: 6px 0 12px 18px; line-height: 1.6;">
           <li><kbd>Alt+Shift+U</kbd> : Toggle Extension On/Off</li>
@@ -372,13 +457,20 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="modal-actions">
           <button class="btn-primary" id="openSettingsBtn">Full Dashboard</button>
         </div>
-      `);
-      document.getElementById('openSettingsBtn')?.addEventListener('click', () => {
-        if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.openOptionsPage) {
-          chrome.runtime.openOptionsPage();
-        }
-        closeModal();
-      });
+      `,
+      );
+      document
+        .getElementById("openSettingsBtn")
+        ?.addEventListener("click", () => {
+          if (
+            typeof chrome !== "undefined" &&
+            chrome.runtime &&
+            chrome.runtime.openOptionsPage
+          ) {
+            chrome.runtime.openOptionsPage();
+          }
+          closeModal();
+        });
     });
   }
 });

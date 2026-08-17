@@ -21,6 +21,11 @@ A lightweight, distraction-free Chrome extension (Manifest V3) that gives you co
 - **Hide Live Chat**: Hides live chat streams and replay boxes.
 - **Hide Playlist**: Hides playlist drawer and next video queues.
 - **Full Width Playlist**: Expands the playlist to take the full width of the window below the video player while automatically hiding comments and video info.
+  - **Cards Grid View** (🎴): Modern responsive visual cards with 16:9 thumbnails, hover elevation, and active video glowing accent.
+  - **Multi-Column View** (📑): Balanced multi-column horizontal cards filling the entire screen width.
+  - **Compact Grid View** (⊞): Dense compact cards for rapid overview of large playlists.
+  - **List View** (☰): Classic full-width vertical list.
+  - _Includes an in-page toolbar switcher directly on YouTube for instant 1-click view changes._
 - **Hide Fundraiser**: Removes donation and fundraiser shelves.
 - **Hide Transcript & Chapters**: Hides video transcripts and timestamp markers.
 

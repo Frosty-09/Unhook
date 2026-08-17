@@ -52,14 +52,18 @@ body {
   max-height: 580px;
   background-color: var(--bg-primary);
   color: var(--text-secondary);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
   font-size: 13.5px;
   line-height: 1.35;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   position: relative;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 /* --------------------------------------------------------------------------
@@ -119,7 +123,10 @@ body {
   align-items: center;
   justify-content: center;
   color: var(--text-muted);
-  transition: color 0.15s ease, background-color 0.15s ease, transform 0.1s ease;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease,
+    transform 0.1s ease;
 }
 
 .icon-btn:hover {
@@ -220,7 +227,9 @@ body.disabled .options-container {
   justify-content: center;
   cursor: pointer;
   border-radius: 4px;
-  transition: color 0.15s ease, background-color 0.15s ease;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease;
   line-height: 1;
 }
 
@@ -238,7 +247,9 @@ body.disabled .options-container {
   margin-left: 23px;
   border-left: 1.5px solid var(--guide-line);
   overflow: hidden;
-  transition: max-height 0.22s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+  transition:
+    max-height 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.2s ease;
   max-height: 350px;
   opacity: 1;
 }
@@ -260,6 +271,47 @@ body.disabled .options-container {
 .sub-row .option-label {
   font-size: 13px;
   color: var(--text-secondary);
+}
+
+.playlist-view-mode-container {
+  padding: 4px 16px 8px 4px;
+}
+
+.segmented-control {
+  display: flex;
+  background: var(--bg-hover);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 2px;
+  gap: 2px;
+  width: 100%;
+}
+
+.segment-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 5px 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.segment-btn:hover {
+  color: var(--text-primary);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.segment-btn.active {
+  background: var(--accent-color);
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
 }
 
 /* --------------------------------------------------------------------------
@@ -300,7 +352,9 @@ body.disabled .options-container {
   left: 2px;
   bottom: 2px;
   background-color: var(--switch-off-thumb);
-  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease;
+  transition:
+    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 0.2s ease;
   border-radius: 50%;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
@@ -364,7 +418,9 @@ input:checked + .slider:before {
   cursor: pointer;
   padding: 6px 10px;
   border-radius: 4px;
-  transition: color 0.15s ease, background-color 0.15s ease;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease;
 }
 
 .footer-link:hover {
